@@ -1,27 +1,35 @@
 package domain;
 
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
-public class Curso implements BaseEntity<Long> {
-	private Long id;
+@Entity
+public class Curso {
+	@Id
+	@SequenceGenerator(name = "Curso_ID_GENERATOR", sequenceName = "Curso_ID_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Curso_ID_GENERATOR")	
+	private Long curso_id;
 
 	private String codigo;
 
 	private String nombre;
 
 	private Integer creditos;
-
+	
+	@ManyToMany
+	@JoinTable(name = "Curso_prerequisitos",
+		joinColumns = @JoinColumn(name = "Curso_ID", referencedColumnName = "Curso_id"),
+		inverseJoinColumns = @JoinColumn(name = "Prerequisito_ID", referencedColumnName = "Curso_id"))
 	private List<Curso> prerequisitos;
 
-	@Override
-	public Long getId() {
-		return id;
-	}
-
-	@Override
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getCodigo() {
 		return codigo;
